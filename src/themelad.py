@@ -13,9 +13,10 @@ def get_theme_paths() -> list[str]:
                 theme_paths.append(full_path)
         return theme_paths
     else:
-        dirs = os.listdir(current_dir)
-        for dir in dirs:
-            theme_paths.append(os.path.join(current_dir, dir))
+        files = os.listdir(current_dir)
+        for file in files:
+            if os.path.isdir(file):
+                theme_paths.append(os.path.join(current_dir, file))
         return theme_paths
 
 
@@ -23,10 +24,13 @@ def get_valid_theme_paths() -> list[str]:
     theme_paths = get_theme_paths()
     valid_theme_paths = []
     for theme_path in theme_paths:
-        # Check inside theme_path for master theme dir
-        pass
+        for file in os.listdir(theme_path):
+            file_path = os.path.join(theme_path, file)
+            if os.path.isdir(file_path) and file.endswith('-master'):
+                valid_theme_paths.append(file_path)
     return valid_theme_paths
 
 
 if __name__ == '__main__':
-    theme_paths = get_valid_theme_paths()
+    valid_theme_paths = get_valid_theme_paths()
+    print(valid_theme_paths)
